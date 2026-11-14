@@ -1,10 +1,15 @@
 const fs = require('node:fs/promises');
 const path = require('node:path');
 
-const PROJECT_DIR = __dirname;
+const PROJECT_DIR = process.cwd();
 const API_MODEL = process.env.OPENAI_MODEL || 'gpt-5.6-luna';
 
 async function readSecretKey() {
+  const environmentKey = String(process.env.OPENAI_API_KEY || '').trim();
+  if (environmentKey) {
+    return environmentKey;
+  }
+
   const envText = await fs.readFile(path.join(PROJECT_DIR, '.env'), 'utf8');
   const line = envText
     .split(/\r?\n/)

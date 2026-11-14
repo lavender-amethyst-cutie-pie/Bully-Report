@@ -26,6 +26,14 @@ OpenAI model: 5.6 Luna
 - Choosing “I don't know” shows the teacher-name field.
 - The AI route is connected and shows a friendly key/internet message when the local environment cannot reach OpenAI.
 
+## Vercel
+
+- Vercel uses `api/analyze.js` as the small server function and serves the `public` folder as the page.
+- In Vercel Project Settings, add `OPENAI_API_KEY` as an Environment Variable for Development, Preview, and Production.
+- No other Vercel environment variable is required; the model is set in `openai-helper.js` from the 5.6 Luna note.
+- After adding or changing the key, redeploy so the new value is used.
+- Browser saving stays local; Vercel does not store reports.
+
 ## MVP checks
 
 - Describe a report and click “Ask the AI what to notice.”
