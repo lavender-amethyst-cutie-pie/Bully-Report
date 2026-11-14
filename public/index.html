@@ -9,29 +9,45 @@
   <body>
     <header class="site-header">
       <div class="shell header-inner">
-        <a class="brand" href="/">Bully Report</a>
-        <span class="header-tag">Safety + kindness</span>
+        <a class="brand" href="/"><span class="brand-mark" aria-hidden="true">🛡️</span><span>Bully Report</span></a>
+        <span class="header-tag"><span class="status-dot"></span> Safety + kindness</span>
       </div>
     </header>
 
     <main class="shell">
       <section class="hero">
-        <p class="eyebrow">Eastvale school safety helper</p>
-        <h1>When something feels wrong, you do not have to figure it out alone.</h1>
-        <p class="hero-copy">Describe what happened. Bully Report asks a few careful questions, helps you notice urgency, and points you toward a trusted adult.</p>
-        <div class="safety-banner"><strong>Immediate danger?</strong> Move to a safe place and call 911 or tell a trusted adult now. Do not wait for the AI.</div>
+        <div class="hero-copy-block">
+          <p class="eyebrow hero-eyebrow">Eastvale school safety helper</p>
+          <h1>Speak up.<br /><span>Get clarity.</span><br />Stay supported.</h1>
+          <p class="hero-copy">Bully Report helps you describe what happened, spot when adult help matters, and take your next safe step.</p>
+          <div class="hero-actions">
+            <a class="hero-button" href="#report-card">Start a report <span aria-hidden="true">→</span></a>
+            <span class="hero-note"><span aria-hidden="true">✦</span> Built for students</span>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="art-spark spark-one">✦</div>
+          <div class="art-spark spark-two">✦</div>
+          <div class="art-orbit orbit-one"></div>
+          <div class="art-orbit orbit-two"></div>
+          <div class="shield-card"><span>🛡️</span><strong>You are<br />not alone.</strong><small>One clear next step</small></div>
+          <div class="art-pill pill-top">AI clarity check</div>
+          <div class="art-pill pill-bottom">Human help matters</div>
+        </div>
+        <div class="safety-banner"><span class="safety-icon" aria-hidden="true">!</span><p><strong>Immediate danger?</strong> Move to a safe place and call 911 or tell a trusted adult now. Do not wait for the AI.</p></div>
       </section>
 
-      <section class="difference-card" aria-label="What makes Bully Report different">
-        <div>
-          <p class="eyebrow">What makes this different</p>
-          <h2>AI clarity check + human follow-up</h2>
+      <section class="steps-card" aria-label="How Bully Report works">
+        <div class="section-intro"><p class="eyebrow">How it works</p><h2>A calmer way to make sense of a hard moment.</h2></div>
+        <div class="steps-row">
+          <div class="step-item"><span class="step-icon step-purple">✍️</span><div><strong>1. Tell your story</strong><p>Use your own words. No perfect report needed.</p></div></div>
+          <div class="step-item"><span class="step-icon step-coral">🧠</span><div><strong>2. Get clarity</strong><p>The AI asks careful questions first.</p></div></div>
+          <div class="step-item"><span class="step-icon step-mint">🤝</span><div><strong>3. Find support</strong><p>A trusted adult helps decide what happens next.</p></div></div>
         </div>
-        <p>The AI helps separate “I need more details” from “please get adult help now.” It never decides guilt, and it never replaces a teacher, counselor, administrator, parent, or guardian.</p>
       </section>
 
       <div class="layout-grid">
-        <section class="card form-card">
+        <section class="card form-card" id="report-card">
           <div class="section-heading">
             <span class="step-number">1</span>
             <div><p class="eyebrow">Start here</p><h2>Describe what happened</h2></div>

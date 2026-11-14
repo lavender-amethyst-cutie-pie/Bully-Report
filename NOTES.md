@@ -34,6 +34,10 @@ OpenAI model: 5.6 Luna
 - After adding or changing the key, redeploy so the new value is used.
 - Browser saving stays local; Vercel does not store reports.
 
+## Design refresh
+
+- Reworked the visual design with stronger colors, a friendly shield hero, a three-step story, clearer buttons, and more welcoming student-focused cards.
+
 ## MVP checks
 
 - Describe a report and click “Ask the AI what to notice.”
