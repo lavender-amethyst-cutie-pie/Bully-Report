@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bully Report · Safety and kindness</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="shell header-inner">
+        <a class="brand" href="/">Bully Report</a>
+        <span class="header-tag">Safety + kindness</span>
+      </div>
+    </header>
+
+    <main class="shell">
+      <section class="hero">
+        <p class="eyebrow">Eastvale school safety helper</p>
+        <h1>When something feels wrong, you do not have to figure it out alone.</h1>
+        <p class="hero-copy">Describe what happened. Bully Report asks a few careful questions, helps you notice urgency, and points you toward a trusted adult.</p>
+        <div class="safety-banner"><strong>Immediate danger?</strong> Move to a safe place and call 911 or tell a trusted adult now. Do not wait for the AI.</div>
+      </section>
+
+      <section class="difference-card" aria-label="What makes Bully Report different">
+        <div>
+          <p class="eyebrow">What makes this different</p>
+          <h2>AI clarity check + human follow-up</h2>
+        </div>
+        <p>The AI helps separate “I need more details” from “please get adult help now.” It never decides guilt, and it never replaces a teacher, counselor, administrator, parent, or guardian.</p>
+      </section>
+
+      <div class="layout-grid">
+        <section class="card form-card">
+          <div class="section-heading">
+            <span class="step-number">1</span>
+            <div><p class="eyebrow">Start here</p><h2>Describe what happened</h2></div>
+          </div>
+          <p class="helper">Use your own words. You can describe words, actions, dates, or where it happened without sharing private details.</p>
+          <form id="report-form">
+            <label for="description">What happened?</label>
+            <textarea id="description" rows="7" required placeholder="Example: Someone keeps making hurtful comments about me during lunch..."></textarea>
+
+            <div class="privacy-note"><strong>Privacy reminder:</strong> Use only a first name and grade. Do not enter a full name, address, phone number, password, photo, or exact location.</div>
+
+            <div class="two-column">
+              <div>
+                <label for="first-name">Person's first name (optional)</label>
+                <input id="first-name" maxlength="40" placeholder="Example: Jordan" />
+              </div>
+              <div>
+                <label for="grade">Grade (optional)</label>
+                <select id="grade">
+                  <option value="">Choose a grade</option>
+                  <option value="6">6th grade</option>
+                  <option value="7">7th grade</option>
+                  <option value="8">8th grade</option>
+                  <option value="unknown">I don't know</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="teacher-field" hidden>
+              <label for="teacher-name">Teacher's name (if you do not know the grade)</label>
+              <input id="teacher-name" maxlength="80" placeholder="Example: Ms. Lee" />
+            </div>
+
+            <button class="primary-button" id="analyze-button" type="submit">Ask the AI what to notice</button>
+            <p class="thinking" id="thinking" hidden aria-live="polite">Thinking…</p>
+          </form>
+          <p class="message" id="status-message" role="status" aria-live="polite"></p>
+        </section>
+
+        <aside class="card examples-card">
+          <p class="eyebrow">Made-up examples</p>
+          <h2>Practice reports</h2>
+          <p class="helper">These are only examples for your video. They are not real people.</p>
+          <ul class="saved-list" id="saved-list"></ul>
+          <p class="local-note">Saves on this computer only for now.</p>
+          <button class="text-button" id="clear-saved" type="button">Clear saved reports</button>
+        </aside>
+      </div>
+
+      <section class="card result-card" id="result-panel" hidden>
+        <div class="result-topline"><span class="result-dot"></span><p class="eyebrow">Bully Report AI</p></div>
+        <h2 id="result-title">Questions from the AI</h2>
+        <p class="result-meta" id="result-meta"></p>
+        <p class="result-text" id="result-text"></p>
+        <div id="follow-up-section" hidden>
+          <label for="follow-up">Your answer (optional)</label>
+          <textarea id="follow-up" rows="4" placeholder="Answer the AI's questions here, if you can..."></textarea>
+          <button class="secondary-button" id="guidance-button" type="button">Get my safe next step</button>
+        </div>
+        <button class="text-button save-button" id="save-button" type="button">Save this report on this computer</button>
+      </section>
+
+      <footer class="site-footer">
+        <p>Bully Report is a school-safety helper, not an emergency service or final decision-maker.</p>
+        <p>For immediate danger, contact emergency services and a trusted adult.</p>
+      </footer>
+    </main>
+    <script src="/storage.js"></script>
+    <script src="/app.js"></script>
+  </body>
+</html>

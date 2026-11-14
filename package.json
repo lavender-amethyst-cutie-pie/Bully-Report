@@ -1,0 +1,9 @@
+{
+  "name": "bully-report",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A simple, safety-first bullying and harassment report helper for the Presidential SI Challenge.",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
