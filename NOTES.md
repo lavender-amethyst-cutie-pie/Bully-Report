@@ -2,7 +2,7 @@
 
 After each save point, push it to GitHub.
 
-OpenAI model: 5.6 Luna
+OpenAI model: `gpt-5.6-luna`
 
 ## How to run locally
 
