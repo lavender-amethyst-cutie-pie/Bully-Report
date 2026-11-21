@@ -66,20 +66,29 @@
       latestReport = data;
       if (stage === 'questions') {
         latestQuestions = result.text;
-        resultTitle.textContent = 'Questions from the AI';
-        resultMeta.textContent = 'Answer these if you can. You can also tell a trusted adult now.';
+        resultTitle.textContent = result.offline ? 'Questions to help you decide' : 'Questions from the AI';
+        resultMeta.textContent = result.offline
+          ? 'Local safety guide is active while the AI connection is unavailable.'
+          : 'Answer these if you can. You can also tell a trusted adult now.';
         followUpSection.hidden = false;
         guidanceButton.hidden = false;
       } else {
         resultTitle.textContent = 'Safe next step';
-        resultMeta.textContent = `AI helper: ${result.model || 'Luna'} · Double-check with a trusted adult.`;
+        resultMeta.textContent = result.offline
+          ? 'Local safety guide · An adult should double-check this next step.'
+          : `AI helper: ${result.model || 'Luna'} · Double-check with a trusted adult.`;
         followUpSection.hidden = true;
         guidanceButton.hidden = true;
       }
       resultText.textContent = result.text;
       resultPanel.hidden = false;
       resultPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      showMessage('The AI answered. Remember: a trusted adult makes the final safety decision.', 'success');
+      showMessage(
+        result.offline
+          ? 'Your report was understood. A trusted adult should make the final safety decision.'
+          : 'The AI answered. Remember: a trusted adult makes the final safety decision.',
+        'success',
+      );
     } catch (error) {
       showMessage(error.message || 'The AI could not answer right now. Please check the key and your internet connection.', 'error');
     } finally {

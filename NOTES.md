@@ -19,6 +19,7 @@ OpenAI model: 5.6 Luna
 - Added server-only `getKey()`. On Vercel it reads `KEYGEN_URL` and `KEYGEN_TOKEN`, calls the Keygen URL with the token, and uses the returned AI key. The browser never sees either secret.
 - `.env` remains ignored by Git.
 - Saves on this computer only for now.
+- Added a clearly labeled local safety guide fallback so report intake still works when the AI key, network, or AI service is unavailable. A configured AI response is still used when the live request succeeds.
 
 ## Verification
 
@@ -27,8 +28,9 @@ OpenAI model: 5.6 Luna
 - The server-side Keygen flow was tested with a local stub and correctly passed the bearer token and read the returned key.
 - Made-up sample reports load from browser storage.
 - Choosing “I don't know” shows the teacher-name field.
-- The AI route is connected and shows a friendly key/internet message when the local environment cannot reach OpenAI.
+- The AI route is connected and uses the clearly labeled local safety guide when the local environment cannot reach OpenAI.
 - A real local AI request reached OpenAI, but the existing local key was rejected as invalid. A valid local key or working `KEYGEN_URL`/`KEYGEN_TOKEN` pair is still needed for a successful live AI answer.
+- With an unavailable/invalid AI key, the local endpoint now returns a 200 response with short safety questions or safe next-step guidance and labels it `Local safety guide`.
 
 ## Vercel
 
