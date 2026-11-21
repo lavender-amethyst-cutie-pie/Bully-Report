@@ -43,7 +43,7 @@ OpenAI model: 5.6 Luna
 
 ## Design refresh
 
-- Simplified the visual design with calmer colors, lighter cards, clearer spacing, a short welcome panel, and more natural student-focused copy.
+- Simplified the visual design with calmer colors, lighter cards, clearer spacing, a friendly shield illustration, and more natural student-focused copy.
 
 ## MVP checks
 
