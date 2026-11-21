@@ -2,27 +2,131 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 
 const PROJECT_DIR = process.cwd();
-const API_MODEL = process.env.OPENAI_MODEL || 'gpt-5.6-luna';
+const API_MODEL = 'gpt-5.6-luna';
+const RUNNING_ON_VERCEL = Boolean(process.env.VERCEL);
 
-async function readSecretKey() {
-  const environmentKey = String(process.env.OPENAI_API_KEY || '').trim();
-  if (environmentKey) {
-    return environmentKey;
-  }
+function createError(code) {
+  const error = new Error(code);
+  error.code = code;
+  return error;
+}
 
-  const envText = await fs.readFile(path.join(PROJECT_DIR, '.env'), 'utf8');
-  const line = envText
-    .split(/\r?\n/)
-    .find((item) => /^\s*OPENAI_API_KEY\s*=/.test(item));
-  const key = line ? line.slice(line.indexOf('=') + 1).trim().replace(/^['"]|['"]$/g, '') : '';
+function parseDotEnv(text) {
+  return Object.fromEntries(
+    text
+      .split(/\r?\n/)
+      .map((line) => line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*$/))
+      .filter(Boolean)
+      .map((match) => [
+        match[1],
+        match[2].replace(/^['"]|['"]$/g, ''),
+      ]),
+  );
+}
 
-  if (!key || key === 'paste-your-key-here') {
-    const error = new Error('KEY_MISSING');
-    error.code = 'KEY_MISSING';
+async function readLocalEnv() {
+  try {
+    const envText = await fs.readFile(path.join(PROJECT_DIR, '.env'), 'utf8');
+    return parseDotEnv(envText);
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      return {};
+    }
     throw error;
   }
+}
 
-  return key;
+function firstString(...values) {
+  return values.find((value) => typeof value === 'string' && value.trim())?.trim() || '';
+}
+
+function extractKey(payload) {
+  if (typeof payload === 'string') {
+    return payload.trim();
+  }
+
+  if (!payload || typeof payload !== 'object') {
+    return '';
+  }
+
+  return firstString(
+    payload.key,
+    payload.apiKey,
+    payload.aiKey,
+    payload.secret,
+    payload.value,
+    payload.token,
+    payload.data?.key,
+    payload.data?.apiKey,
+    payload.data?.aiKey,
+    payload.data?.attributes?.key,
+    payload.data?.attributes?.apiKey,
+    payload.data?.attributes?.value,
+  );
+}
+
+async function getKey() {
+  const localEnv = RUNNING_ON_VERCEL ? {} : await readLocalEnv();
+  const keygenUrl = String(
+    process.env.KEYGEN_URL || localEnv.KEYGEN_URL || '',
+  ).trim();
+  const keygenToken = String(
+    process.env.KEYGEN_TOKEN || localEnv.KEYGEN_TOKEN || '',
+  ).trim();
+
+  if (keygenUrl || keygenToken) {
+    if (!keygenUrl || !keygenToken) {
+      throw createError('KEYGEN_CONFIG_MISSING');
+    }
+
+    let response;
+    try {
+      response = await fetch(keygenUrl, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${keygenToken}`,
+          Accept: 'application/json, text/plain;q=0.9, */*;q=0.8',
+        },
+      });
+    } catch (error) {
+      throw createError('KEYGEN_NETWORK_ERROR');
+    }
+
+    const responseText = await response.text();
+    let payload = responseText;
+    try {
+      payload = JSON.parse(responseText);
+    } catch (error) {
+      // A plain-text key is also supported.
+    }
+
+    if (!response.ok) {
+      throw createError('KEYGEN_ERROR');
+    }
+
+    const key = extractKey(payload);
+    if (!key || key === 'paste-your-key-here') {
+      throw createError('KEYGEN_KEY_MISSING');
+    }
+
+    return key;
+  }
+
+  if (RUNNING_ON_VERCEL) {
+    throw createError('KEYGEN_CONFIG_MISSING');
+  }
+
+  // Local-only compatibility for the existing ignored .env file. Vercel never
+  // reads this fallback; its key must come through getKey() from Keygen.
+  const localOpenAIKey = String(
+    process.env.OPENAI_API_KEY || localEnv.OPENAI_API_KEY || '',
+  ).trim();
+
+  if (!localOpenAIKey || localOpenAIKey === 'paste-your-key-here') {
+    throw createError('KEY_MISSING');
+  }
+
+  return localOpenAIKey;
 }
 
 async function readBrief() {
@@ -45,7 +149,7 @@ function buildUserMessage({ report, firstName, grade, teacherName, followUp, sta
 }
 
 async function askOpenAI(details) {
-  const [apiKey, brief] = await Promise.all([readSecretKey(), readBrief()]);
+  const [apiKey, brief] = await Promise.all([getKey(), readBrief()]);
   const safetyRules = `
 
 Additional safety rules for Bully Report:
@@ -103,4 +207,4 @@ Additional safety rules for Bully Report:
   return { text, model: '5.6 Luna' };
 }
 
-module.exports = { askOpenAI };
+module.exports = { askOpenAI, getKey };
