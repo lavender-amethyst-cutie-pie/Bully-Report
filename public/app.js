@@ -13,6 +13,7 @@
   const guidanceButton = document.querySelector('#guidance-button');
   const saveButton = document.querySelector('#save-button');
   const savedList = document.querySelector('#saved-list');
+  const teacherPrompt = document.querySelector('#teacher-prompt');
   const statusMessage = document.querySelector('#status-message');
   let latestReport = null;
   let latestQuestions = '';
@@ -52,6 +53,7 @@
       return;
     }
 
+    teacherPrompt.hidden = false;
     setBusy(true, button);
     showMessage('', '');
     try {

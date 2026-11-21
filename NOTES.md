@@ -27,6 +27,7 @@ OpenAI model: 5.6 Luna
 - The server-side Keygen flow was tested with a local stub and correctly passed the bearer token and read the returned key.
 - Made-up sample reports load from browser storage.
 - Choosing “I don't know” shows the teacher-name field.
+- Submitting a report reveals a clear prompt to tell a teacher, counselor, or trusted adult when help is needed.
 - The AI route is connected and shows a friendly key/internet message when the local environment cannot reach OpenAI.
 - A real local AI request reached OpenAI, but the existing local key was rejected as invalid. A valid local key or working `KEYGEN_URL`/`KEYGEN_TOKEN` pair is still needed for a successful live AI answer.
 

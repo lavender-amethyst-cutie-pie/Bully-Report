@@ -95,6 +95,8 @@ button { font: inherit; cursor: pointer; }
 button:disabled { cursor: wait; opacity: .55; }
 .thinking { margin: 14px 0 0; color: var(--purple); font-weight: 700; text-align: center; }
 .message { min-height: 24px; margin: 14px 0 0; font-size: .9rem; }
+.teacher-prompt { margin-top: 18px; padding: 13px 14px; border: 1px solid #bfe4d2; border-radius: 12px; background: #effbf5; color: #285d48; font-size: .88rem; }
+.teacher-prompt strong { display: block; margin-bottom: 3px; }
 .message.error { color: #b3261e; }
 .message.success { color: #17643e; }
 .examples-card { position: sticky; top: 20px; background: linear-gradient(180deg, #fff, #f4fffb); }
