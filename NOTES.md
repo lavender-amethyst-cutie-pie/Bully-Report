@@ -17,6 +17,7 @@ OpenAI model: 5.6 Luna
 - Added browser-only saving in `public/storage.js`.
 - Kept the OpenAI request in `openai-helper.js` so the key stays on the server.
 - Added server-only `getKey()`. On Vercel it reads `KEYGEN_URL` and `KEYGEN_TOKEN`, calls the Keygen URL with the token, and uses the returned AI key. The browser never sees either secret.
+- The server gets the AI key from `getKey()`, which asks MindDo at `KEYGEN_URL/api/lookup-key`, caches the returned key until `expiresAt`, and refreshes once if OpenAI rejects it.
 - `.env` remains ignored by Git.
 - Saves on this computer only for now.
 

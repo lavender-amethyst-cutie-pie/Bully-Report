@@ -63,7 +63,14 @@
         body: JSON.stringify({ ...data, stage, followUp: followUp.value.trim() }),
       });
       const result = await response.json();
-      if (!response.ok) throw new Error(result.error || 'The AI could not answer right now.');
+      if (!response.ok) {
+        const apiError = result.error && typeof result.error === 'object'
+          ? result.error
+          : { message: result.error };
+        const clientError = new Error(apiError.message || 'The AI could not answer right now.');
+        clientError.fix = apiError.fix || '';
+        throw clientError;
+      }
 
       latestReport = data;
       if (stage === 'questions') {
@@ -83,6 +90,7 @@
       resultPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
       showMessage('The AI answered. Remember: a trusted adult makes the final safety decision.', 'success');
     } catch (error) {
+      if (error.fix) console.error(error.fix);
       showMessage(error.message || 'The AI could not answer right now. Please check the key and your internet connection.', 'error');
     } finally {
       setBusy(false, button);

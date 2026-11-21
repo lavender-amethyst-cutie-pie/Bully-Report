@@ -22,6 +22,15 @@ function sendJson(response, status, body) {
   response.end(JSON.stringify(body));
 }
 
+function sendError(response, status, error, fallbackMessage, fallbackFix) {
+  const publicError = {
+    message: typeof error?.message === 'string' ? error.message : fallbackMessage,
+    fix: typeof error?.fix === 'string' ? error.fix : fallbackFix,
+  };
+  console.error(publicError.fix);
+  sendJson(response, status, { error: publicError });
+}
+
 async function readRequestBody(request) {
   let body = '';
   for await (const chunk of request) {
@@ -78,7 +87,13 @@ const server = http.createServer(async (request, response) => {
       const followUp = String(body.followUp || '').trim();
 
       if (report.length < 5) {
-        sendJson(response, 400, { error: 'Please describe what happened in a few words first.' });
+        sendError(
+          response,
+          400,
+          null,
+          'Please describe what happened in a few words first.',
+          'Add a few words to the report and submit it again.',
+        );
         return;
       }
 
@@ -104,18 +119,34 @@ const server = http.createServer(async (request, response) => {
     response.end('Method not allowed');
   } catch (error) {
     if (error.message === 'REQUEST_TOO_LARGE') {
-      sendJson(response, 413, { error: 'That report is too long. Please use fewer words.' });
+      sendError(
+        response,
+        413,
+        null,
+        'That report is too long. Please use fewer words.',
+        'Shorten the report and submit it again.',
+      );
       return;
     }
 
     if (error instanceof SyntaxError) {
-      sendJson(response, 400, { error: 'Please send the report again.' });
+      sendError(
+        response,
+        400,
+        null,
+        'Please send the report again.',
+        'Send the report as JSON with a report field.',
+      );
       return;
     }
 
-    sendJson(response, 503, {
-      error: 'The AI could not answer right now. Please check the key and your internet connection. If this feels urgent, tell a trusted adult now.',
-    });
+    sendError(
+      response,
+      503,
+      error,
+      'The AI could not answer right now.',
+      'Check the MindDo settings and internet connection, then try again.',
+    );
   }
 });
 
