@@ -148,63 +148,7 @@ function buildUserMessage({ report, firstName, grade, teacherName, followUp, sta
   ].join('\n');
 }
 
-function hasUrgentSignal(report) {
-  return /\b(weapon|gun|knife|bomb|attack|planned attack|injur(?:y|ed)|bleeding|emergency|kill(?:ed|ing)?|suicide|self[- ]harm|hurt (?:myself|someone|me|them)|going to hurt)\b/i.test(report);
-}
-
-function createLocalSafetyResponse({ report, stage }) {
-  const urgent = hasUrgentSignal(report);
-  if (stage === 'guidance' && urgent) {
-    return {
-      text: 'Move to a safe place and do not confront the person. Tell a trusted adult, school safety staff, or emergency services right now; call 911 in the United States if someone may be hurt. Keep any messages or details that may help an adult understand what happened. This guide cannot decide how serious the situation is, so an adult should review it immediately.',
-      model: 'Local safety guide',
-      offline: true,
-    };
-  }
-
-  if (stage === 'guidance') {
-    return {
-      text: 'This situation is worth sharing with a trusted adult, even if you are unsure whether it was a joke. Tell them what happened, when it happened, and how it made you feel. Do not confront the person alone; a teacher, counselor, or school safety staff member can help decide what to do next. If you feel in immediate danger, move to safety and call 911 or local emergency services.',
-      model: 'Local safety guide',
-      offline: true,
-    };
-  }
-
-  return {
-    text: urgent
-      ? 'Are you in immediate danger right now, or could someone be hurt soon? What happened most recently, and which trusted adult can you tell right now?'
-      : 'What happened most recently, and did anyone threaten, touch, or injure someone? Which trusted adult could you tell today, such as a teacher, counselor, or parent?',
-    model: 'Local safety guide',
-    offline: true,
-  };
-}
-
-function canUseLocalSafetyGuide(error) {
-  return [
-    'AI_ERROR',
-    'EMPTY_RESPONSE',
-    'KEYGEN_CONFIG_MISSING',
-    'KEYGEN_ERROR',
-    'KEYGEN_KEY_MISSING',
-    'KEYGEN_NETWORK_ERROR',
-    'KEY_INVALID',
-    'KEY_MISSING',
-    'NETWORK_ERROR',
-  ].includes(error?.code);
-}
-
 async function askOpenAI(details) {
-  try {
-    return await askOpenAIOnline(details);
-  } catch (error) {
-    if (canUseLocalSafetyGuide(error)) {
-      return createLocalSafetyResponse(details);
-    }
-    throw error;
-  }
-}
-
-async function askOpenAIOnline(details) {
   const [apiKey, brief] = await Promise.all([getKey(), readBrief()]);
   const safetyRules = `
 
@@ -260,7 +204,7 @@ Additional safety rules for Bully Report:
     throw error;
   }
 
-  return { text, model: '5.6 Luna', offline: false };
+  return { text, model: '5.6 Luna' };
 }
 
 module.exports = { askOpenAI, getKey };
