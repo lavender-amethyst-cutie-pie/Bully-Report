@@ -43,7 +43,7 @@ OpenAI model: 5.6 Luna
 
 ## Design refresh
 
-- Kept the friendly shield hero and three-step story, but reduced hero size, removed floating badges, softened shadows, and simplified the headline.
+- Simplified the top of the page to a short, flat intro panel and made the report form the visual focus. The existing three-step story and safety details remain.
 
 ## MVP checks
 
